@@ -332,7 +332,8 @@ nonisolated enum SlideRenderer {
         let margin: CGFloat = 26
         let size = CGSize(width: width + margin * 2, height: m.height)
         let dark = style.isDark
-        let core = CGRect(x: margin + 6, y: (m.height * 0.34).rounded(), width: max(1, width - 12), height: (m.height * 0.32).rounded())
+        // Its ends stay well inside the words, so its blur fades out before the window's edge.
+        let core = CGRect(x: margin + 10, y: (m.height * 0.34).rounded(), width: max(1, width - 34), height: (m.height * 0.32).rounded())
         guard let canvas = Bitmap(size: size, scale: style.scale) else { return (nil, .zero) }
         canvas.fillCapsule(core, color: CGColor(gray: dark ? 0 : 1, alpha: dark ? 0.55 : 0.66))
         guard let sharp = canvas.image() else { return (nil, .zero) }

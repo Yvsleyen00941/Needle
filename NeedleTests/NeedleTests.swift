@@ -265,3 +265,31 @@ import Testing
         #expect(CornerController.corner(for: layout(), side: .right) == 1610)
     }
 }
+
+// MARK: Wallpaper
+
+@Suite struct AerialWallpaper {
+    /// A wallpaper store like macOS's own, with `provider` chosen for the desktop.
+    func store(provider: String, asset: String = "4DFE24ED-71CC-42D4-9FE8-3B8959B6CC19", still: Bool = true) throws -> URL {
+        let root = FileManager.default.temporaryDirectory.appending(path: "needle-wallpaper-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: root.appending(path: "Store"), withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: root.appending(path: "aerials/thumbnails"), withIntermediateDirectories: true)
+        let configuration = try PropertyListSerialization.data(fromPropertyList: ["assetID": asset], format: .binary, options: 0)
+        let choice: [String: Any] = ["Provider": provider, "Configuration": configuration]
+        let index: [String: Any] = ["AllSpacesAndDisplays": ["Desktop": ["Content": ["Choices": [choice]]]]]
+        try PropertyListSerialization.data(fromPropertyList: index, format: .binary, options: 0).write(to: root.appending(path: "Store/Index.plist"))
+        if still { try Data([0x89]).write(to: root.appending(path: "aerials/thumbnails/\(asset).png")) }
+        return root
+    }
+
+    @Test func anAerialIsReadFromItsStill() throws {
+        let root = try store(provider: "com.apple.wallpaper.choice.aerials")
+        #expect(Wallpaper.aerialStill(store: root)?.lastPathComponent == "4DFE24ED-71CC-42D4-9FE8-3B8959B6CC19.png")
+    }
+
+    @Test func aPictureIsLeftToTheSystem() throws {
+        #expect(Wallpaper.aerialStill(store: try store(provider: "com.apple.wallpaper.choice.image")) == nil)
+        #expect(Wallpaper.aerialStill(store: try store(provider: "com.apple.wallpaper.choice.aerials", still: false)) == nil)
+        #expect(Wallpaper.aerialStill(store: try store(provider: "com.apple.wallpaper.choice.aerials", asset: "../../etc")) == nil)
+    }
+}

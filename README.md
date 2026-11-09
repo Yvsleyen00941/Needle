@@ -16,7 +16,7 @@ browser, any app that plays.
 Needle is [Tape](https://github.com/Yvsleyen00941/Tape)'s other side. It uses the same corner, the
 same Focus design and the same fit to the Dock, with an album cover where Tape shows a stock.
 
-![Needle beside the Dock, showing Undertow by Marina Vale from Low Tide](docs/corner.webp)
+![Needle beside the Dock on a 14-inch MacBook, showing Undertow by Marina Vale](docs/corner.webp)
 
 <sub>The records in these pictures are made up and their covers are drawn in code (`-NeedleDemo YES`), so no one's library is shown.</sub>
 
@@ -89,17 +89,22 @@ next:
 
 | Strip | Shows |
 |---|---|
-| wide | cover, title in its colour over *artist · album*, and the clock ![](docs/corner.webp) |
+| wide | cover, title in its colour over *artist · album*, and the clock |
 | on glass | the same on a pane of the Dock's glass, its corners concentric with the cover's ![](docs/glass.webp) |
 | about 130 pt | a smaller cover and smaller words, without the clock ![](docs/compact.webp) |
 | about 74 pt | the cover and the clock: the corner made for an album cover ![](docs/narrow.webp) |
 | narrower still | the cover alone, as large as the strip allows |
 
+Needle sits right of the Dock by default, and Tape sits left, so the Dock is between them. Settings →
+Placement moves it to the left.
+
+![Tape left of the Dock, Needle right of it](docs/both.webp)
+
 Placement is Tape's. The window sits between the screen's edge and the Dock's glass, centred on the
 icons. When there's room to spare, the slide is centred in the corner. It follows the Dock as apps
 open and close and as the Dock grows or shrinks, slides in and out with an auto-hiding Dock, and
 redraws for each screen's scale. Text is light or dark to suit the wallpaper behind it, or you can
-choose. Settings → Placement chooses the side and the distance from the Dock.
+choose. Settings → Placement also sets the distance from the Dock.
 
 ![Settings](docs/settings.webp)
 
@@ -146,8 +151,9 @@ Debug and checking:
 - MediaRemote is private. If a future macOS closes the way in through perl, Needle shows
   "Now Playing can't be read" in its menu and in Settings, rather than guessing.
 - Some players never report the track's length (live radio, some web players). Those tracks have no clock.
-- Like Tape, Needle reads the desktop picture to choose light or dark text. With an Aerial
-  wallpaper, macOS reports the default picture rather than the moving one, so set Contrast by hand
-  if the text looks wrong.
+- Needle reads the desktop picture behind the corner to choose light or dark text. For an Aerial,
+  macOS reports the default picture instead of the video, so Needle reads that Aerial's still
+  from the wallpaper store instead. The video keeps moving, so if a scene turns from day to night,
+  set Contrast by hand.
 
 MIT licence. © 2026 Yorben Vander Sleyen.

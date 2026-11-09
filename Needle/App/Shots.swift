@@ -72,7 +72,7 @@ enum Shots {
 
     /// Transparent windows are composited onto the wallpaper that's really behind them.
     private static func shoot(_ window: NSWindow, _ name: String, into folder: URL) async {
-        guard !alpha, let screen = window.screen ?? NSScreen.main, let url = NSWorkspace.shared.desktopImageURL(for: screen) else {
+        guard !alpha, let screen = window.screen ?? NSScreen.main, let url = Wallpaper.imageURL(for: screen) else {
             await capture(window, name, into: folder, background: nil)
             return
         }

@@ -55,7 +55,8 @@ final class Settings {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        side = defaults.string(forKey: Key.side).flatMap(DockSide.init(rawValue:)) ?? .left
+        // Right of the Dock: Tape takes the left, so the two share the Dock between them.
+        side = defaults.string(forKey: Key.side).flatMap(DockSide.init(rawValue:)) ?? .right
         dockGap = defaults.object(forKey: Key.dockGap) as? Double ?? 22
         fontSize = defaults.object(forKey: Key.fontSize) as? Double ?? 14
         contrast = defaults.string(forKey: Key.contrast).flatMap(Contrast.init(rawValue:)) ?? .automatic

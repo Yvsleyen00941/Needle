@@ -81,6 +81,29 @@ nonisolated enum Wallpaper {
         return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
     }
 
+    /// The picture on the desktop. For an Aerial, which is a video, macOS reports the default
+    /// picture instead; the Aerial's own still is in the wallpaper store, and that's what to read.
+    static func imageURL(for screen: NSScreen) -> URL? {
+        aerialStill() ?? NSWorkspace.shared.desktopImageURL(for: screen)
+    }
+
+    /// The still of the Aerial on the desktop, when the desktop is an Aerial.
+    static func aerialStill(store: URL = URL.applicationSupportDirectory.appending(path: "com.apple.wallpaper")) -> URL? {
+        guard let data = try? Data(contentsOf: store.appending(path: "Store/Index.plist")),
+              let index = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else { return nil }
+        for scope in ["AllSpacesAndDisplays", "SystemDefault"] {
+            guard let desktop = (index[scope] as? [String: Any])?["Desktop"] as? [String: Any],
+                  let choice = ((desktop["Content"] as? [String: Any])?["Choices"] as? [[String: Any]])?.first else { continue }
+            guard choice["Provider"] as? String == "com.apple.wallpaper.choice.aerials" else { return nil }
+            guard let configuration = choice["Configuration"] as? Data,
+                  let settings = try? PropertyListSerialization.propertyList(from: configuration, format: nil) as? [String: Any],
+                  let asset = settings["assetID"] as? String, !asset.contains("/") else { return nil }
+            let still = store.appending(path: "aerials/thumbnails/\(asset).png")
+            return FileManager.default.fileExists(atPath: still.path) ? still : nil
+        }
+        return nil
+    }
+
     static func scaling(for screen: NSScreen) -> Scaling {
         let options = NSWorkspace.shared.desktopImageOptions(for: screen) ?? [:]
         let allowClipping = options[.allowClipping] as? Bool ?? true

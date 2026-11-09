@@ -73,7 +73,7 @@ enum Preview {
         let metrics = style.metrics
         guard let frame = CornerController.frame(for: layout, side: model.settings.side, gap: model.settings.dockGap, height: metrics.height) else { return }
         let local = frame.offsetBy(dx: -screen.frame.minX, dy: -screen.frame.minY)
-        let wallpaperURL = NSWorkspace.shared.desktopImageURL(for: screen)
+        let wallpaperURL = Wallpaper.imageURL(for: screen)
         let scaling = Wallpaper.scaling(for: screen)
         if !style.glass, model.settings.contrast == .automatic, let wallpaperURL,
            let sample = Wallpaper.sample(imageAt: wallpaperURL, screenSize: screen.frame.size, region: local, scaling: scaling) {

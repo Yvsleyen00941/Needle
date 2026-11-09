@@ -186,7 +186,7 @@ final class CornerController {
     private func sampleWallpaper(for frame: CGRect) {
         guard model.settings.contrast == .automatic else { return }
         guard let screen = panel.screen ?? NSScreen.screens.first(where: { $0.frame.intersects(frame) }),
-              let url = NSWorkspace.shared.desktopImageURL(for: screen) else { return }
+              let url = Wallpaper.imageURL(for: screen) else { return }
         let region = frame.offsetBy(dx: -screen.frame.minX, dy: -screen.frame.minY)
         let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate)?.timeIntervalSince1970 ?? 0
         let key = "\(url.path)|\(modified)|\(region.integral)"

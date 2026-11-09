@@ -89,7 +89,7 @@ struct CornerPreview: View {
     private func loadBackdrop() async {
         guard let frame = model.corner?.stripFrame,
               let screen = NSScreen.screens.first(where: { $0.frame.intersects(frame) }),
-              let url = NSWorkspace.shared.desktopImageURL(for: screen) else { return }
+              let url = Wallpaper.imageURL(for: screen) else { return }
         // A slice as wide as the pane, centred on the corner.
         let width: CGFloat = 520
         let height: CGFloat = 100
